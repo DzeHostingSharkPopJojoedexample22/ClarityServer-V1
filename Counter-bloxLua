@@ -299,11 +299,7 @@ local thatCoferkImage = nil
 local bhopEnabled = false
 local BHOP_DELAY = 0.09
 
--- Third Person переменные
-local thirdPersonEnabled = false
-local thirdPersonKey = Enum.KeyCode.T
-local thirdPersonDistance = 500
-local originalCameraSubject = nil
+
 
 -- Peek Helper переменные
 local peekHelperEnabled = false
