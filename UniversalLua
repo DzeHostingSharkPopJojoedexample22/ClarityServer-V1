@@ -129,7 +129,7 @@ toggleEscBlock(menuVisible)
 spinbotEnabled = false
 spinbotAngle = 0
 spinbotDirection = 1
-spinbotSpeed = 70
+spinbotSpeed = 20
 spinbotJitter = 0
 spinbotPitch = 0
 spinbotConnection = nil
@@ -299,7 +299,11 @@ local thatCoferkImage = nil
 local bhopEnabled = false
 local BHOP_DELAY = 0.09
 
-
+-- Third Person переменные
+local thirdPersonEnabled = false
+local thirdPersonKey = Enum.KeyCode.T
+local thirdPersonDistance = 500
+local originalCameraSubject = nil
 
 -- Peek Helper переменные
 local peekHelperEnabled = false
@@ -731,6 +735,7 @@ end
 
 createBindLabel("Aimbot", function() return aimbotKey end)
 createBindLabel("Auto Fire", function() return autoFireKey end)
+createBindLabel("Camera bug", function() return thirdPersonKey end)
 createBindLabel("Peek Helper", function() return peekHelperKey end)
 createBindLabel("Menu", function() return menuKey end)
 
@@ -740,6 +745,7 @@ createBindLabel("Menu", function() return menuKey end)
 local activeStates = {
     Aimbot = false,
     ["Auto Fire"] = false,
+    ["Camera bug"] = false,
     ["Peek Helper"] = false,
     Menu = false
 }
@@ -2899,6 +2905,8 @@ local function updateContent()
         yPos = yPos + h
         
     elseif currentTab == "Misc" then
+        
+        
 
         local t, h = createToggle(scrollingFrame, yPos, "Spinbot (undetect)", function() return spinbotEnabled end, function(v) 
             toggleUndetectSpinbot(v)
@@ -2933,7 +2941,7 @@ local function updateContent()
         local k, h = createKeybind(scrollingFrame, yPos, "Menu Key", function() return menuKey end, function(v) menuKey = v end)
         yPos = yPos + h
         
-        local t, h = createToggle(scrollingFrame, yPos, "Strafe hack", function() return preStrafeEnabled end, function(v) preStrafeEnabled = v end)
+        local t, h = createToggle(scrollingFrame, yPos, "Pre-strafe", function() return preStrafeEnabled end, function(v) preStrafeEnabled = v end)
         yPos = yPos + h
         
         local t, h = createToggle(scrollingFrame, yPos, "Aspect Ratio", function() return aspectRatioEnabled end, function(v) aspectRatioEnabled = v end)
