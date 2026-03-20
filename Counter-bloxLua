@@ -20,33 +20,61 @@ local Mouse = LocalPlayer:GetMouse()
 -- =====================================================
 -- NOCLIP ПЕРЕМЕННЫЕ И ФУНКЦИИ
 -- =====================================================
+-- =====================================================
+-- NOCLIP ПЕРЕМЕННЫЕ И ФУНКЦИИ (ПРОСТОЙ ВАРИАНТ)
+-- =====================================================
+-- =====================================================
+-- NOCLIP ПЕРЕМЕННЫЕ И ФУНКЦИИ (ИСПРАВЛЕННЫЙ)
+-- =====================================================
 local noclipEnabled = false
 
-local function updateNoclip()
+local function applyNoclipState()
     local character = LocalPlayer.Character
     if not character then return end
     
-    if noclipEnabled then
-        for _, part in pairs(character:GetDescendants()) do
-            if part:IsA("BasePart") then
+    for _, part in pairs(character:GetDescendants()) do
+        if part:IsA("BasePart") then
+            if noclipEnabled then
                 part.CanCollide = false
-            end
-        end
-    else
-        for _, part in pairs(character:GetDescendants()) do
-            if part:IsA("BasePart") then
+            else
                 part.CanCollide = true
             end
         end
     end
 end
 
-RunService.Stepped:Connect(updateNoclip)
+local function updateNoclip()
+    applyNoclipState()
+end
 
+-- ТОЛЬКО ОДИН РАЗ ПРИ ПОЯВЛЕНИИ ПЕРСОНАЖА
 LocalPlayer.CharacterAdded:Connect(function()
     task.wait(0.5)
     updateNoclip()
 end)
+
+-- Если персонаж уже есть, применяем сразу
+if LocalPlayer.Character then
+    task.wait(0.5)
+    updateNoclip()
+end
+
+-- Следим за новыми частями (без постоянного цикла!)
+local function watchForNewParts(character)
+    character.DescendantAdded:Connect(function(part)
+        if noclipEnabled and part:IsA("BasePart") then
+            part.CanCollide = false
+        end
+    end)
+end
+
+LocalPlayer.CharacterAdded:Connect(function(character)
+    watchForNewParts(character)
+end)
+
+if LocalPlayer.Character then
+    watchForNewParts(LocalPlayer.Character)
+end
 
 -- =====================================================
 -- THIRD PERSON UNLOCK
@@ -129,9 +157,9 @@ toggleEscBlock(menuVisible)
 spinbotEnabled = false
 spinbotAngle = 0
 spinbotDirection = 1
-spinbotSpeed = 70
+spinbotSpeed = 20
 spinbotJitter = 0
-spinbotPitch = -45
+spinbotPitch = 0
 spinbotConnection = nil
 
 function setupUndetectSpinbot()
@@ -300,10 +328,7 @@ local bhopEnabled = false
 local BHOP_DELAY = 0.09
 
 -- Third Person переменные
-local thirdPersonEnabled = false
-local thirdPersonKey = Enum.KeyCode.T
-local thirdPersonDistance = 500
-local originalCameraSubject = nil
+
 
 -- Peek Helper переменные
 local peekHelperEnabled = false
@@ -2928,6 +2953,8 @@ local function updateContent()
         local k, h = createKeybind(scrollingFrame, yPos, "Peek Helper Key", function() return peekHelperKey end, function(v) peekHelperKey = v end)
         yPos = yPos + h
 
+        --------------------------------------------------------------------
+
         -- =====================================================
         -- НОКЛИП ГАЛОЧКА (РАБОЧАЯ)
         -- =====================================================
@@ -2969,7 +2996,7 @@ local function updateContent()
         local reloadButton = Instance.new("TextButton")
         reloadButton.Size = UDim2.new(1, 0, 1, 0)
         reloadButton.BackgroundTransparency = 1
-        reloadButton.Text = "Reload ESP/Chams"
+        reloadButton.Text = "Test button"
         reloadButton.TextColor3 = Color3.fromRGB(220, 220, 220)
         reloadButton.TextSize = 18
         reloadButton.Font = Enum.Font.SourceSans
