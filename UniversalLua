@@ -299,11 +299,7 @@ local thatCoferkImage = nil
 local bhopEnabled = false
 local BHOP_DELAY = 0.09
 
--- Third Person переменные
-local thirdPersonEnabled = false
-local thirdPersonKey = Enum.KeyCode.T
-local thirdPersonDistance = 500
-local originalCameraSubject = nil
+
 
 -- Peek Helper переменные
 local peekHelperEnabled = false
@@ -735,7 +731,6 @@ end
 
 createBindLabel("Aimbot", function() return aimbotKey end)
 createBindLabel("Auto Fire", function() return autoFireKey end)
-createBindLabel("Camera bug", function() return thirdPersonKey end)
 createBindLabel("Peek Helper", function() return peekHelperKey end)
 createBindLabel("Menu", function() return menuKey end)
 
@@ -745,7 +740,6 @@ createBindLabel("Menu", function() return menuKey end)
 local activeStates = {
     Aimbot = false,
     ["Auto Fire"] = false,
-    ["Camera bug"] = false,
     ["Peek Helper"] = false,
     Menu = false
 }
@@ -2905,14 +2899,6 @@ local function updateContent()
         yPos = yPos + h
         
     elseif currentTab == "Misc" then
-        local t, h = createToggle(scrollingFrame, yPos, "Camera bug", function() return thirdPersonEnabled end, function(v) thirdPersonEnabled = v end)
-        yPos = yPos + h
-        
-        local k, h = createKeybind(scrollingFrame, yPos, "Camera bug Key", function() return thirdPersonKey end, function(v) thirdPersonKey = v end)
-        yPos = yPos + h
-        
-        local s, h = createSlider(scrollingFrame, yPos, "Camera bug Distance", function() return thirdPersonDistance end, function(v) thirdPersonDistance = v end, 100, 1000, " studs")
-        yPos = yPos + h
 
         local t, h = createToggle(scrollingFrame, yPos, "Spinbot (undetect)", function() return spinbotEnabled end, function(v) 
             toggleUndetectSpinbot(v)
